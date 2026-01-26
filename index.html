@@ -1,44 +1,548 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Startup</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kizu — Regain control of your focus, habits, and daily routine</title>
+  <meta name="description" content="Kizu is an intelligent productivity & self-awareness platform that tracks attention patterns and habits, turning them into meaningful insights to reduce distractions and build clarity." />
+  <meta name="keywords" content="focus, productivity, habits, digital wellness, journaling, self-awareness, attention tracking, mental clarity" />
+  <meta name="theme-color" content="#050816" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="Kizu — Focus, habits, and clarity in a distracted world" />
+  <meta property="og:description" content="Track attention patterns, build healthier habits, and turn your daily behavior into actionable insights." />
+  <meta property="og:type" content="website" />
+
   <style>
-    body {
-      font-family: system-ui, Arial, sans-serif;
-      background: #0f172a;
-      color: white;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      text-align: center;
+    :root{
+      --bg:#050816;
+      --bg2:#071028;
+      --card:rgba(255,255,255,.06);
+      --card2:rgba(255,255,255,.08);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.70);
+      --muted2:rgba(255,255,255,.58);
+      --line:rgba(255,255,255,.10);
+      --a:#7c3aed;  /* violet */
+      --b:#22d3ee;  /* cyan */
+      --c:#34d399;  /* green */
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius:18px;
+      --radius2:24px;
+      --max:1100px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
-    .box {
-      max-width: 600px;
-      padding: 30px;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 70% -10%, rgba(34,211,238,.20), transparent 55%),
+        radial-gradient(900px 600px at 10% 0%, rgba(124,58,237,.22), transparent 55%),
+        radial-gradient(1000px 700px at 50% 110%, rgba(52,211,153,.10), transparent 50%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      overflow-x:hidden;
     }
-    h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    p { font-size: 1.1rem; opacity: 0.85; }
-    button {
-      margin-top: 20px;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      background: #38bdf8;
-      color: #020617;
-      cursor: pointer;
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:24px;}
+    .nav{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(10px);
+      background: rgba(5,8,22,.55);
+      border-bottom:1px solid var(--line);
+    }
+    .navin{display:flex; align-items:center; justify-content:space-between; gap:12px; max-width:var(--max); margin:0 auto; padding:14px 24px;}
+    .brand{display:flex; align-items:center; gap:10px; text-decoration:none}
+    .logo{
+      width:34px; height:34px; border-radius:12px;
+      background: conic-gradient(from 200deg, var(--b), var(--a), var(--c), var(--b));
+      box-shadow: 0 12px 30px rgba(34,211,238,.15);
+      position:relative;
+    }
+    .logo:after{
+      content:""; position:absolute; inset:2px; border-radius:10px;
+      background: rgba(5,8,22,.85);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .brand span{font-weight:700; letter-spacing:.2px}
+    .links{display:flex; align-items:center; gap:16px; color:var(--muted); font-size:14px}
+    .links a{opacity:.9; text-decoration:none}
+    .links a:hover{opacity:1; color:var(--text)}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:12px 16px; border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      text-decoration:none;
+      box-shadow: 0 10px 30px rgba(0,0,0,.20);
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      font-weight:600;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.18);}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(34,211,238,.95), rgba(124,58,237,.92));
+      border-color: rgba(255,255,255,.22);
+      color:#051018;
+    }
+    .btn.primary:hover{filter:saturate(1.05) brightness(1.02)}
+    .btn.small{padding:10px 12px; border-radius:12px; font-size:14px}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .glow{
+      position:absolute; inset:-180px -120px auto -120px; height:520px;
+      background: radial-gradient(closest-side, rgba(34,211,238,.16), transparent 70%);
+      pointer-events:none; filter: blur(2px);
+      animation: float 10s ease-in-out infinite;
+    }
+    @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(18px)} }
+    .hero{position:relative; padding:48px 0 18px;}
+    .grid2{display:grid; grid-template-columns: 1.15fr .85fr; gap:26px; align-items:center;}
+    .h1{
+      font-size: clamp(34px, 4.8vw, 56px);
+      line-height:1.02;
+      margin:14px 0 12px;
+      letter-spacing:-.7px;
+    }
+    .sub{color:var(--muted); font-size: clamp(16px, 1.6vw, 18px); line-height:1.55; margin:0 0 18px;}
+    .cta{display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:18px}
+    .note{color:var(--muted2); font-size:13px; margin-top:10px}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+    }
+    .heroCard{padding:18px; position:relative; overflow:hidden;}
+    .heroCard:before{
+      content:""; position:absolute; inset:-1px; border-radius: var(--radius2);
+      background: radial-gradient(500px 250px at 20% 20%, rgba(124,58,237,.30), transparent 55%),
+                  radial-gradient(500px 250px at 80% 10%, rgba(34,211,238,.22), transparent 55%);
+      opacity:.75; pointer-events:none;
+    }
+    .heroCard > *{position:relative}
+    .statGrid{display:grid; grid-template-columns: repeat(3,1fr); gap:10px; margin-top:12px}
+    .stat{
+      padding:12px; border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(5,8,22,.35);
+    }
+    .stat b{display:block; font-size:16px}
+    .stat span{display:block; color:var(--muted2); font-size:12px; margin-top:4px}
+    .section{padding:28px 0}
+    .titleRow{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin:0 0 14px}
+    h2{margin:0; font-size:26px; letter-spacing:-.3px}
+    .hint{color:var(--muted2); font-size:14px; margin:0}
+    .cards{
+      display:grid; grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    .c{
+      padding:16px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      transition: transform .15s ease, background .15s ease;
+    }
+    .c:hover{transform:translateY(-2px); background: rgba(255,255,255,.07)}
+    .icon{
+      width:40px; height:40px; border-radius:14px;
+      display:grid; place-items:center;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      margin-bottom:10px;
+    }
+    .c h3{margin:0 0 6px; font-size:16px}
+    .c p{margin:0; color:var(--muted); font-size:14px; line-height:1.5}
+    .how{
+      display:grid; grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    .step{
+      padding:16px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      position:relative;
+      overflow:hidden;
+    }
+    .num{
+      font-weight:800;
+      letter-spacing:-.5px;
+      font-size:13px;
+      color: rgba(255,255,255,.72);
+      display:inline-flex;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .step h3{margin:10px 0 8px; font-size:16px}
+    .step p{margin:0; color:var(--muted); font-size:14px; line-height:1.55}
+    .split{
+      display:grid; grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    .box{padding:18px}
+    .box h3{margin:0 0 8px; font-size:16px}
+    .box p{margin:0; color:var(--muted); font-size:14px; line-height:1.55}
+    .list{margin:12px 0 0; padding:0; list-style:none; display:grid; gap:10px}
+    .li{display:flex; gap:10px; align-items:flex-start; color:var(--muted)}
+    .tick{width:18px; height:18px; border-radius:6px; background: rgba(52,211,153,.18); border:1px solid rgba(52,211,153,.25); margin-top:2px}
+    .faq{display:grid; gap:10px}
+    details{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      border-radius: 16px;
+      padding: 12px 14px;
+    }
+    summary{cursor:pointer; font-weight:650; color:var(--text)}
+    details p{margin:10px 0 0; color:var(--muted); font-size:14px; line-height:1.55}
+    .ctaCard{
+      padding:18px;
+      display:grid; grid-template-columns: 1.2fr .8fr;
+      gap:14px; align-items:center;
+      overflow:hidden; position:relative;
+    }
+    .ctaCard:before{
+      content:""; position:absolute; inset:-1px;
+      background: radial-gradient(600px 220px at 20% 20%, rgba(34,211,238,.22), transparent 60%),
+                  radial-gradient(600px 220px at 80% 40%, rgba(124,58,237,.26), transparent 60%);
+      opacity:.9; pointer-events:none;
+    }
+    .ctaCard > *{position:relative}
+    .form{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    input{
+      padding:12px 14px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(5,8,22,.40);
+      color: var(--text);
+      outline:none;
+      min-width: 220px;
+    }
+    input::placeholder{color: rgba(255,255,255,.45)}
+    .footer{
+      border-top:1px solid var(--line);
+      color:var(--muted2);
+      padding:18px 0 34px;
+      font-size:13px;
+      display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center;
+    }
+    .social{display:flex; gap:12px; align-items:center}
+    .social a{opacity:.85; text-decoration:none}
+    .social a:hover{opacity:1; color:var(--text)}
+    .tag{display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.05); font-size:12px; color:var(--muted)}
+    .badge{width:8px; height:8px; border-radius:99px; background: var(--b); box-shadow:0 0 0 4px rgba(34,211,238,.12)}
+    .sr{position:absolute; left:-9999px}
+    @media (max-width: 900px){
+      .grid2{grid-template-columns: 1fr; }
+      .statGrid{grid-template-columns: repeat(3, 1fr)}
+      .cards{grid-template-columns: 1fr}
+      .how{grid-template-columns: 1fr}
+      .split{grid-template-columns: 1fr}
+      .ctaCard{grid-template-columns: 1fr}
+      .form{justify-content:flex-start}
+      input{width:100%}
+      .links{display:none}
     }
   </style>
 </head>
+
 <body>
-  <div class="box">
-    <h1>Mi Startup 🚀</h1>
-    <p>Estamos construyendo algo increíble.</p>
-    <button>Únete a la beta</button>
+  <div class="nav">
+    <div class="navin">
+      <a class="brand" href="#top" aria-label="Kizu home">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Kizu</span>
+      </a>
+      <div class="links" aria-label="sections">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#for">For you</a>
+        <a href="#mission">Mission</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <a class="btn small primary" href="#waitlist">Join waitlist</a>
+    </div>
   </div>
+
+  <main id="top" class="wrap">
+    <section class="hero">
+      <div class="glow" aria-hidden="true"></div>
+
+      <div class="grid2">
+        <div>
+          <div class="pill">
+            <span class="badge" aria-hidden="true"></span>
+            Intelligent productivity & self-awareness
+          </div>
+
+          <h1 class="h1">Regain control of your focus, habits, and daily routine.</h1>
+          <p class="sub">
+            Kizu tracks attention patterns, habits, and behaviors—then turns them into meaningful insights.
+            Reduce digital distractions, build healthier routines, and stay clear-headed in a noisy world.
+          </p>
+
+          <div class="cta">
+            <a class="btn primary" href="#waitlist">Join the waitlist</a>
+            <a class="btn" href="#features">Explore features</a>
+            <span class="tag">Beta in progress</span>
+          </div>
+          <p class="note">Designed for students and young professionals who feel overwhelmed by notifications, overload, and lack of structure.</p>
+        </div>
+
+        <div class="card heroCard" aria-label="preview">
+          <div class="pill" style="width:max-content;margin-bottom:10px;">Your day → insights → better routines</div>
+          <div class="statGrid">
+            <div class="stat">
+              <b>Focus patterns</b>
+              <span>Understand what breaks your attention</span>
+            </div>
+            <div class="stat">
+              <b>Habit loops</b>
+              <span>Build consistency with awareness</span>
+            </div>
+            <div class="stat">
+              <b>Mental clarity</b>
+              <span>Less noise, more intention</span>
+            </div>
+          </div>
+          <div style="margin-top:12px; padding:14px; border-radius:16px; border:1px solid rgba(255,255,255,.10); background: rgba(5,8,22,.35); color:var(--muted); font-size:13px; line-height:1.55;">
+            <b style="color:var(--text);">Kizu Insight</b><br/>
+            “Your focus drops after 3 notification bursts. Try a 25-minute focus session + a 5-minute reset.”
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="titleRow">
+        <h2>What Kizu helps you do</h2>
+        <p class="hint">Simple tools that turn daily behavior into long-term self-control.</p>
+      </div>
+
+      <div class="cards">
+        <div class="c">
+          <div class="icon">🎯</div>
+          <h3>Attention tracking</h3>
+          <p>Spot your distraction triggers and learn when you’re naturally most focused.</p>
+        </div>
+        <div class="c">
+          <div class="icon">🧠</div>
+          <h3>AI-driven insights</h3>
+          <p>Transform patterns into recommendations you can actually act on—without overwhelm.</p>
+        </div>
+        <div class="c">
+          <div class="icon">📓</div>
+          <h3>Journaling & reflection</h3>
+          <p>Build self-awareness with quick prompts that connect mood, habits, and focus.</p>
+        </div>
+        <div class="c">
+          <div class="icon">⏳</div>
+          <h3>Focus tools</h3>
+          <p>Guided sessions, gentle friction, and routine support to protect deep work.</p>
+        </div>
+        <div class="c">
+          <div class="icon">🔁</div>
+          <h3>Habit building</h3>
+          <p>Create sustainable routines that stick—based on what you actually do, not what you plan.</p>
+        </div>
+        <div class="c">
+          <div class="icon">🔔</div>
+          <h3>Smart reminders</h3>
+          <p>Context-aware nudges that help you reset before you spiral into distraction.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="section">
+      <div class="titleRow">
+        <h2>How it works</h2>
+        <p class="hint">From distraction → awareness → clarity.</p>
+      </div>
+
+      <div class="how">
+        <div class="step">
+          <span class="num">01</span>
+          <h3>Track your patterns</h3>
+          <p>Kizu observes your attention shifts and habit signals (in a privacy-first way) to reveal what’s really happening.</p>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <h3>Turn data into insights</h3>
+          <p>AI highlights trends like notification bursts, energy dips, and recurring loops—then suggests small, realistic changes.</p>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <h3>Build intentional routines</h3>
+          <p>Use focus sessions, journaling, and habit scaffolding to replace reactive behavior with a calmer daily structure.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="titleRow">
+        <h2>Key outcomes</h2>
+        <p class="hint">What you’ll feel after using Kizu consistently.</p>
+      </div>
+
+      <div class="split">
+        <div class="card box">
+          <h3>Benefits</h3>
+          <ul class="list">
+            <li class="li"><span class="tick"></span> Better focus with fewer digital interruptions</li>
+            <li class="li"><span class="tick"></span> Healthier habits built on self-awareness</li>
+            <li class="li"><span class="tick"></span> Higher productivity with less burnout</li>
+            <li class="li"><span class="tick"></span> More mental clarity and emotional stability</li>
+          </ul>
+        </div>
+        <div class="card box">
+          <h3>What makes Kizu different</h3>
+          <p>
+            Most productivity apps focus on tasks or blocking distractions.
+            Kizu focuses on <b>awareness</b>—understanding behavior patterns and turning them into long-term self-control.
+          </p>
+          <div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;">
+            <span class="tag"><span class="badge" style="background:var(--a)"></span> Self-awareness first</span>
+            <span class="tag"><span class="badge" style="background:var(--b)"></span> Insight-driven</span>
+            <span class="tag"><span class="badge" style="background:var(--c)"></span> Habit sustainability</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="for" class="section">
+      <div class="titleRow">
+        <h2>Built for you</h2>
+        <p class="hint">Two core audiences, one shared problem: distraction.</p>
+      </div>
+
+      <div class="split">
+        <div class="c">
+          <div class="icon">🎓</div>
+          <h3>Students</h3>
+          <p>Study with structure. Stay consistent. Learn what breaks your attention and how to recover fast.</p>
+        </div>
+        <div class="c">
+          <div class="icon">💼</div>
+          <h3>Young professionals</h3>
+          <p>Cut through notification overload, reduce context-switching, and build routines that protect deep work.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="mission" class="section">
+      <div class="titleRow">
+        <h2>Why Kizu exists</h2>
+        <p class="hint">Born from digital distraction, burnout, and the need for better tools.</p>
+      </div>
+
+      <div class="card box">
+        <p>
+          Kizu started from a simple observation: many tools help you plan tasks or block distractions,
+          but very few help you <b>understand your behavior</b> and build lasting self-control.
+          We’re building an MVP, validating demand, and preparing a beta to learn from real users.
+        </p>
+
+        <div style="margin-top:14px; display:grid; grid-template-columns: repeat(3,1fr); gap:10px;">
+          <div class="stat"><b>Vision</b><span>More intentional living in a distracted world</span></div>
+          <div class="stat"><b>Mission</b><span>Turn daily patterns into clarity and control</span></div>
+          <div class="stat"><b>Quality</b><span>Premium, trustworthy, and privacy-aware</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="titleRow">
+        <h2>Roadmap (early)</h2>
+        <p class="hint">A quick look at what’s coming next.</p>
+      </div>
+      <div class="cards">
+        <div class="c"><div class="icon">🧪</div><h3>Beta access</h3><p>Invite-only testing with students and young professionals.</p></div>
+        <div class="c"><div class="icon">📊</div><h3>Pattern dashboard</h3><p>Clear attention + habit insights, weekly summaries, and trend reports.</p></div>
+        <div class="c"><div class="icon">✨</div><h3>Guided routines</h3><p>Personalized focus plans, journaling prompts, and habit scaffolding.</p></div>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <div class="titleRow">
+        <h2>FAQ</h2>
+        <p class="hint">Quick answers before you join the waitlist.</p>
+      </div>
+
+      <div class="faq">
+        <details>
+          <summary>Is Kizu a blocker app?</summary>
+          <p>No. Kizu is primarily about self-awareness and insight. It can help reduce distractions, but the goal is understanding patterns and building long-term routines.</p>
+        </details>
+        <details>
+          <summary>When will the beta launch?</summary>
+          <p>We’re currently building the MVP and validating demand. Join the waitlist to be notified about beta access as soon as it opens.</p>
+        </details>
+        <details>
+          <summary>How do you handle privacy?</summary>
+          <p>Kizu is designed to be privacy-aware. We focus on meaningful insights without unnecessary data collection. (We’ll publish clear privacy details closer to beta.)</p>
+        </details>
+      </div>
+    </section>
+
+    <section id="waitlist" class="section">
+      <div class="card ctaCard">
+        <div>
+          <h2 style="margin:0 0 6px;">Join the Kizu waitlist</h2>
+          <p class="hint" style="margin:0;">
+            Get beta access updates, launch notifications, and early product drops.
+          </p>
+          <p class="note" style="margin:10px 0 0;">Tip: You can connect this form to Formspree/Google Forms in 2 minutes.</p>
+        </div>
+
+        <!-- FORM: Replace action="" later -->
+        <form class="form" action="" method="post" onsubmit="return handleSubmit(event)">
+          <label class="sr" for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required />
+          <button class="btn primary" type="submit">Get early access</button>
+          <a class="btn" href="#features">See details</a>
+        </form>
+      </div>
+    </section>
+
+    <div class="footer">
+      <div>© <span id="year"></span> Kizu. All rights reserved.</div>
+      <div class="social">
+        <!-- Replace # with your real links -->
+        <a href="#" aria-label="X / Twitter">X</a>
+        <a href="#" aria-label="Instagram">Instagram</a>
+        <a href="#" aria-label="TikTok">TikTok</a>
+        <a href="#" aria-label="Email">Email</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Simple local "thank you" (until you connect a real form endpoint)
+    function handleSubmit(e){
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      if(!email) return false;
+      alert("Thanks! You're on the Kizu waitlist (demo). Connect a real form endpoint to collect emails.");
+      e.target.reset();
+      return false;
+    }
+  </script>
 </body>
 </html>
